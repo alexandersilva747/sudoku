@@ -19,6 +19,6 @@
             <Insets bottom="10.0" />
          </VBox.margin>
       </Label>
-      <TextArea fx:id="textAreaInstructions" onDragDetected="#onActiontextAreaInstructions" prefHeight="313.0" prefWidth="600.0" text="Please, follow the next instructions to play the sudoku game:&#10;&#10;-- On each horizontal line put numbers from 1 to 6.&#10;&#10;-- On each vertical line put numbers from 1 to 6.&#10;&#10;-- On each cuadrant 6 x 6 put numbers from 1 to 6.&#10;&#10;-- You could get help any time. This help suggest the correct number on empty spaces.&#10;&#10;-- Click on validate to know if your game is ok.&#10;&#10;Good Luck!" />
+      <TextArea fx:id="textAreaInstructions" onDragDetected="#onActionTextAreaInstructions" onKeyPressed="#onKeyPressedTextAreaInstructions" prefHeight="313.0" prefWidth="600.0" text="Please, follow the next instructions to play the sudoku game:&#10;&#10;-- On each horizontal line put numbers from 1 to 6.&#10;&#10;-- On each vertical line put numbers from 1 to 6.&#10;&#10;-- On each cuadrant 6 x 6 put numbers from 1 to 6.&#10;&#10;-- You could get help any time. This help suggest the correct number on empty spaces.&#10;&#10;-- Click on validate to know if your game is ok.&#10;&#10;Good Luck!" />
    </children>
 </VBox>
