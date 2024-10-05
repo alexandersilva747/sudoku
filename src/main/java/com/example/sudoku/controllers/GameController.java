@@ -1,4 +1,4 @@
-package com.example.sudoku;
+package com.example.sudoku.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
