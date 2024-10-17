@@ -21,7 +21,7 @@ public class InstructionsController {
         System.out.println("MouseEvent");
         textAreaInstructions.setEditable(false);
     }
-
+    @FXML
     public void onKeyPressedTextAreaInstructions(KeyEvent keyEvent) {
         System.out.println("KeyEvent");
         textAreaInstructions.setEditable(false);
