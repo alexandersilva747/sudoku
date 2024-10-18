@@ -139,46 +139,42 @@ public class GameController {
         // Suponiendo que tienes todos los TextField en un array o GridPane
         // Necesitarás vincular los TextField desde tu archivo FXML a variables en este metodo
         TextField[][] campos = new TextField[6][6];
-
-        // Por ejemplo:
-        campos[0][0] = TextField00; // Asociado con el fx:id en FXML
-        campos[0][1] = TextField01;
-        campos[0][2] = TextField02;
-        campos[0][3] = TextField03;
-        campos[0][4] = TextField04;
-        campos[0][5] = TextField05;
+        campos[0][0] = TextField00;
         campos[1][0] = TextField10;
-        campos[1][1] = TextField11;
-        campos[1][2] = TextField12;
-        campos[1][3] = TextField13;
-        campos[1][4] = TextField14;
-        campos[1][5] = TextField15;
         campos[2][0] = TextField20;
-        campos[2][1] = TextField21;
-        campos[2][2] = TextField22;
-        campos[2][3] = TextField23;
-        campos[2][4] = TextField24;
-        campos[2][5] = TextField25;
         campos[3][0] = TextField30;
-        campos[3][1] = TextField31;
-        campos[3][2] = TextField32;
-        campos[3][3] = TextField33;
-        campos[3][4] = TextField34;
-        campos[3][5] = TextField35;
         campos[4][0] = TextField40;
-        campos[4][1] = TextField41;
-        campos[4][2] = TextField42;
-        campos[4][3] = TextField43;
-        campos[4][4] = TextField44;
-        campos[4][5] = TextField45;
         campos[5][0] = TextField50;
+        campos[0][1] = TextField01;
+        campos[1][1] = TextField11;
+        campos[2][1] = TextField21;
+        campos[3][1] = TextField31;
+        campos[4][1] = TextField41;
         campos[5][1] = TextField51;
+        campos[0][2] = TextField02;
+        campos[1][2] = TextField12;
+        campos[2][2] = TextField22;
+        campos[3][2] = TextField32;
+        campos[4][2] = TextField42;
         campos[5][2] = TextField52;
+        campos[0][3] = TextField03;
+        campos[1][3] = TextField13;
+        campos[2][3] = TextField23;
+        campos[3][3] = TextField33;
+        campos[4][3] = TextField43;
         campos[5][3] = TextField53;
+        campos[0][4] = TextField04;
+        campos[1][4] = TextField14;
+        campos[2][4] = TextField24;
+        campos[3][4] = TextField34;
+        campos[4][4] = TextField44;
         campos[5][4] = TextField54;
+        campos[0][5] = TextField05;
+        campos[1][5] = TextField15;
+        campos[2][5] = TextField25;
+        campos[3][5] = TextField35;
+        campos[4][5] = TextField45;
         campos[5][5] = TextField55;
-
-        // ...
 
         return campos;
     }
