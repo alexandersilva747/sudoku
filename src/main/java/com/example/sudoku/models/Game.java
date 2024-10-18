@@ -4,6 +4,8 @@
  */
 package com.example.sudoku.models;
 
+import com.example.sudoku.models.alerts.AlertBoxGame;
+
 import java.util.Random;
 
 public class Game {
@@ -84,6 +86,54 @@ public class Game {
 
     public int[][] getMatrizGame() {
         return matrizGame;
+    }
+
+    // Metodo para validar la matriz
+    public boolean validateMatrizGame(int num, int fila, int columna) {
+        //Verificar fila
+        for (int col = 0; col < 6; col++) {
+            if (matrizGame[fila][col] == num) {
+                new AlertBoxGame().showAlert(
+                        "Sudoku",
+                        "Something isn't working",
+                        "Please, try again"
+                );
+                return false; //El numero ya esta en la fila
+            }
+        }
+        // Verificar columna
+        for (int row = 0; row < 6; row++) {
+            if (matrizGame[row][columna] == num) {
+                new AlertBoxGame().showAlert(
+                        "Sudoku",
+                        "Something isn't working",
+                        "Please, try again"
+                );
+                return false; // El numero ya esta en la columna
+            }
+        }
+        //Verificar cuadrante 3*3
+        int inicioFila = (fila / 3) * 3;
+        int inicioColumna = (columna / 3) * 3;
+
+        for (int i = 0; i < 3; i++){
+            for (int j = 0; j < 3; j++){
+                if (matrizGame[inicioFila + i][inicioColumna + j] == num){
+                    new AlertBoxGame().showAlert(
+                            "Sudoku",
+                            "Something isn't working",
+                            "Please, try again"
+                    );
+                    return  false; // El numero ya esta en el cuadrante 3*3
+                }
+            }
+        }
+        new AlertBoxGame().showAlert(
+                "Sudoku",
+                "CONGRATULATIONS",
+                "YOU DID IT"
+        );
+        return true; //El numero es valido
     }
 }
 
