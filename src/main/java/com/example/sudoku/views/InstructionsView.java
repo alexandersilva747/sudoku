@@ -48,4 +48,12 @@ public class InstructionsView extends Stage {
     private static class GameViewHolder {
         private static InstructionsView INSTANCE;
     }
+
+    public void showInstructions() {
+        if (!this.isShowing()) {
+            this.show(); // Mostrar la ventana si no está visible
+        } else {
+            this.toFront(); // Si ya está abierta, llevarla al frente
+        }
+    }
 }

@@ -177,10 +177,10 @@ public class GameController {
         return campos;
     }
 
-
     @FXML
-    public void onActionGameInstructionsButton(ActionEvent actionEvent) throws IOException{
-        InstructionsView.getInstance();
+    public void onActionGameInstructionsButton(ActionEvent actionEvent) throws IOException {
+        InstructionsView instructionsView = InstructionsView.getInstance();
+        instructionsView.showInstructions(); // Llamar al metodo para mostrar la ventana o llevarla al frente
     }
     @FXML
     public void onActionValidateButton(ActionEvent actionEvent) {
