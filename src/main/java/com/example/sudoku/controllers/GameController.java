@@ -112,12 +112,12 @@ public class GameController {
      * Llena los TextField del Sudoku con los valores generados en la matriz.
      */
     private void fillSudoku(int[][] matriz) {
-        // Obtén todos los TextField del GridPane (asumiendo que ya están asociados correctamente)
-        TextField[][] camposTexto = getSudokuFields();
+        // Obtener todos los TextField del GridPane
+        TextField[][] textFields = getSudokuFields();
         //ciclo para limpiar el estilo de los campos que cambiaron a verde cuando se uso la ayuda en el juego anterior
         for (int row = 0; row < 6; row++) {
             for (int col = 0; col < 6; col++) {
-                camposTexto[row][col].setStyle(""); // Esto restablece el estilo a su valor por defecto
+                textFields[row][col].setStyle(""); // Esto restablece el estilo a su valor por defecto
             }
         }
 
@@ -125,11 +125,11 @@ public class GameController {
         for (int row = 0; row < 6; row++) {
             for (int col = 0; col < 6; col++) {
                 if (matriz[row][col] != 0) {
-                    camposTexto[row][col].setText(String.valueOf(matriz[row][col]));
-                    camposTexto[row][col].setEditable(false); // Si es un número fijo, no se debe poder editar
+                    textFields[row][col].setText(String.valueOf(matriz[row][col]));
+                    textFields[row][col].setEditable(false); // Si es un número fijo, no se debe poder editar
                 } else {
-                    camposTexto[row][col].setText(""); // Dejar vacíos los campos editables
-                    camposTexto[row][col].setEditable(true); // Permitir al jugador ingresar números
+                    textFields[row][col].setText(""); // Dejar vacíos los campos editables
+                    textFields[row][col].setEditable(true); // Permitir al jugador ingresar números
                 }
             }
         }
@@ -137,7 +137,6 @@ public class GameController {
 
     /**
      * Este metodo debe obtener todos los TextField que forman el tablero de Sudoku.
-     * Puedes hacer esto usando fx:id en tu FXML para cada TextField o de forma programática.
      */
     private TextField[][] getSudokuFields() {
         // vincular los TextField desde archivo FXML a variables en este metodo
@@ -190,16 +189,16 @@ public class GameController {
     @FXML
     public void onActionValidateButton(ActionEvent actionEvent) {
         // Obtener los valores del Sudoku desde los TextField
-        TextField[][] camposTexto = getSudokuFields();
-        int[][] matrizActual = new int[6][6];
+        TextField[][] textFields = getSudokuFields();
+        int[][] currentMatriz = new int[6][6];
 
         for (int row = 0; row < 6; row++) {
             for (int col = 0; col < 6; col++) {
-                String valorTexto = camposTexto[row][col].getText();
-                if (!valorTexto.isEmpty()) {
+                String textValue = textFields[row][col].getText();
+                if (!textValue.isEmpty()) {
                     try {
-                        int num = Integer.parseInt(valorTexto);
-                        matrizActual[row][col] = num;
+                        int num = Integer.parseInt(textValue);
+                        currentMatriz[row][col] = num;
                     } catch (NumberFormatException e) {
                         // Manejar números inválidos (por ejemplo, si el jugador ingresó un valor no numérico)
                         new AlertBoxGame().showAlert(
@@ -216,7 +215,7 @@ public class GameController {
         // Validar cada número de la matriz
         for (int row = 0; row < 6; row++) {
             for (int col = 0; col < 6; col++) {
-                int num = matrizActual[row][col];
+                int num = currentMatriz[row][col];
                 if (num != 0) {
                     if (!game.validateMatrizGame(num, row, col)) {
                         // Si hay un error en la validación, mostrar alerta y detener
@@ -240,35 +239,35 @@ public class GameController {
         int[][] matriz = game.getMatrizGame();
 
         // Obtén los TextField (asociados al tablero)
-        TextField[][] camposTexto = getSudokuFields();
+        TextField[][] textFields = getSudokuFields();
 
         // Encuentra un campo vacío aleatorio
-        List<int[]> camposVacios = new ArrayList<>();
-        for (int fila = 0; fila < 6; fila++) {
+        List<int[]> emptyField = new ArrayList<>();
+        for (int row = 0; row < 6; row++) {
             for (int col = 0; col < 6; col++) {
-                if (matriz[fila][col] == 0) { // Campo vacío
-                    camposVacios.add(new int[]{fila, col});
+                if (matriz[row][col] == 0) { // Campo vacío
+                    emptyField.add(new int[]{row, col});
                 }
             }
         }
 
-        if (camposVacios.isEmpty()) {
+        if (emptyField.isEmpty()) {
             new AlertBoxGame().showAlert("Sudoku", "¡Sin sugerencias!", "El tablero está completo.");
             return;
         }
 
         // Selecciona un campo vacío aleatorio
         Random random = new Random();
-        int[] campoAleatorio = camposVacios.get(random.nextInt(camposVacios.size()));
-        int fila = campoAleatorio[0];
-        int col = campoAleatorio[1];
+        int[] randomField = emptyField.get(random.nextInt(emptyField.size()));
+        int fila = randomField[0];
+        int col = randomField[1];
 
         // Buscar un número válido para esa posición
         for (int num = 1; num <= 6; num++) {
-            if (game.validateMatrizGame(num, fila, col)) {
+            if (game.isValidSuggestion(num, fila, col)) {
                 // Sugerir el número al jugador
-                camposTexto[fila][col].setText(String.valueOf(num));
-                camposTexto[fila][col].setStyle("-fx-background-color: lightgreen;"); // Cambiar color como sugerencia
+                textFields[fila][col].setText(String.valueOf(num));
+                textFields[fila][col].setStyle("-fx-background-color: lightgreen;"); // Cambiar color como sugerencia
                 new AlertBoxGame().showAlert("Sudoku", "Sugerencia", "Número sugerido en fila " + (fila+1) + ", columna " + (col+1));
                 return;
             }
