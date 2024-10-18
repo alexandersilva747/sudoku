@@ -88,7 +88,7 @@ public class GameController {
     /**
      * Arreglo que representa los numeros que se van ingresando
      */
-    private TextField[] camposLetras;
+    private TextField[] numbFields;
 
 
     @FXML
@@ -105,15 +105,21 @@ public class GameController {
         int[][] matriz = game.getMatrizGame();
 
         // Llenar los TextField con los números generados
-        llenarSudoku(matriz);
+        fillSudoku(matriz);
     }
 
     /**
      * Llena los TextField del Sudoku con los valores generados en la matriz.
      */
-    private void llenarSudoku(int[][] matriz) {
+    private void fillSudoku(int[][] matriz) {
         // Obtén todos los TextField del GridPane (asumiendo que ya están asociados correctamente)
-        TextField[][] camposTexto = obtenerCamposSudoku();
+        TextField[][] camposTexto = getSudokuFields();
+        //ciclo para limpiar el estilo de los campos que cambiaron a verde cuando se uso la ayuda en el juego anterior
+        for (int row = 0; row < 6; row++) {
+            for (int col = 0; col < 6; col++) {
+                camposTexto[row][col].setStyle(""); // Esto restablece el estilo a su valor por defecto
+            }
+        }
 
         // Llenar los TextField con los valores de la matriz
         for (int row = 0; row < 6; row++) {
@@ -133,48 +139,47 @@ public class GameController {
      * Este metodo debe obtener todos los TextField que forman el tablero de Sudoku.
      * Puedes hacer esto usando fx:id en tu FXML para cada TextField o de forma programática.
      */
-    private TextField[][] obtenerCamposSudoku() {
-        // Suponiendo que tienes todos los TextField en un array o GridPane
-        // Necesitarás vincular los TextField desde tu archivo FXML a variables en este metodo
-        TextField[][] campos = new TextField[6][6];
-        campos[0][0] = TextField00;
-        campos[0][1] = TextField01;
-        campos[0][2] = TextField02;
-        campos[0][3] = TextField03;
-        campos[0][4] = TextField04;
-        campos[0][5] = TextField05;
-        campos[1][0] = TextField10;
-        campos[1][1] = TextField11;
-        campos[1][2] = TextField12;
-        campos[1][3] = TextField13;
-        campos[1][4] = TextField14;
-        campos[1][5] = TextField15;
-        campos[2][0] = TextField20;
-        campos[2][1] = TextField21;
-        campos[2][2] = TextField22;
-        campos[2][3] = TextField23;
-        campos[2][4] = TextField24;
-        campos[2][5] = TextField25;
-        campos[3][0] = TextField30;
-        campos[3][1] = TextField31;
-        campos[3][2] = TextField32;
-        campos[3][3] = TextField33;
-        campos[3][4] = TextField34;
-        campos[3][5] = TextField35;
-        campos[4][0] = TextField40;
-        campos[4][1] = TextField41;
-        campos[4][2] = TextField42;
-        campos[4][3] = TextField43;
-        campos[4][4] = TextField44;
-        campos[4][5] = TextField45;
-        campos[5][0] = TextField50;
-        campos[5][1] = TextField51;
-        campos[5][2] = TextField52;
-        campos[5][3] = TextField53;
-        campos[5][4] = TextField54;
-        campos[5][5] = TextField55;
+    private TextField[][] getSudokuFields() {
+        // vincular los TextField desde archivo FXML a variables en este metodo
+        TextField[][] fields = new TextField[6][6];
+        fields[0][0] = TextField00;
+        fields[0][1] = TextField01;
+        fields[0][2] = TextField02;
+        fields[0][3] = TextField03;
+        fields[0][4] = TextField04;
+        fields[0][5] = TextField05;
+        fields[1][0] = TextField10;
+        fields[1][1] = TextField11;
+        fields[1][2] = TextField12;
+        fields[1][3] = TextField13;
+        fields[1][4] = TextField14;
+        fields[1][5] = TextField15;
+        fields[2][0] = TextField20;
+        fields[2][1] = TextField21;
+        fields[2][2] = TextField22;
+        fields[2][3] = TextField23;
+        fields[2][4] = TextField24;
+        fields[2][5] = TextField25;
+        fields[3][0] = TextField30;
+        fields[3][1] = TextField31;
+        fields[3][2] = TextField32;
+        fields[3][3] = TextField33;
+        fields[3][4] = TextField34;
+        fields[3][5] = TextField35;
+        fields[4][0] = TextField40;
+        fields[4][1] = TextField41;
+        fields[4][2] = TextField42;
+        fields[4][3] = TextField43;
+        fields[4][4] = TextField44;
+        fields[4][5] = TextField45;
+        fields[5][0] = TextField50;
+        fields[5][1] = TextField51;
+        fields[5][2] = TextField52;
+        fields[5][3] = TextField53;
+        fields[5][4] = TextField54;
+        fields[5][5] = TextField55;
 
-        return campos;
+        return fields;
     }
 
     @FXML
@@ -185,7 +190,7 @@ public class GameController {
     @FXML
     public void onActionValidateButton(ActionEvent actionEvent) {
         // Obtener los valores del Sudoku desde los TextField
-        TextField[][] camposTexto = obtenerCamposSudoku();
+        TextField[][] camposTexto = getSudokuFields();
         int[][] matrizActual = new int[6][6];
 
         for (int row = 0; row < 6; row++) {
@@ -235,7 +240,7 @@ public class GameController {
         int[][] matriz = game.getMatrizGame();
 
         // Obtén los TextField (asociados al tablero)
-        TextField[][] camposTexto = obtenerCamposSudoku();
+        TextField[][] camposTexto = getSudokuFields();
 
         // Encuentra un campo vacío aleatorio
         List<int[]> camposVacios = new ArrayList<>();

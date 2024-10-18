@@ -70,12 +70,12 @@ public class Game {
                 return false; // El numero ya esta en la columna
             }
         }
-        //Verificar cuadrante 3*3
-        int inicioFila = (fila / 3) * 2;
-        int inicioColumna = (columna / 3) * 2;
+        //Verificar cuadrante 2*3
+        int inicioFila = (fila / 3) * 3;
+        int inicioColumna = (columna / 2) * 2;
 
         for (int i = 0; i < 3; i++){
-            for (int j = 0; j < 3; j++){
+            for (int j = 0; j < 2; j++){
                 if (matrizGame[inicioFila + i][inicioColumna + j] == num){
                     return  false; // El numero ya esta en el cuadrante 3*3
                 }
@@ -113,11 +113,11 @@ public class Game {
             }
         }
         //Verificar cuadrante 3*3
-        int inicioFila = (fila / 3) * 2;
-        int inicioColumna = (columna / 3) * 2;
+        int inicioFila = (fila / 3) * 3;
+        int inicioColumna = (columna / 2) * 2;
 
         for (int i = 0; i < 3; i++){
-            for (int j = 0; j < 3; j++){
+            for (int j = 0; j < 2; j++){
                 if (matrizGame[inicioFila + i][inicioColumna + j] == num){
                     new AlertBoxGame().showAlert(
                             "Sudoku",
@@ -128,6 +128,8 @@ public class Game {
                 }
             }
         }
+        //Ajustar mensaje, porque esta apareciendo cuando hay colmnas o filas llenas,
+        //Solo debe aparecer cuando se complar las tres condiciones
         new AlertBoxGame().showAlert(
                 "Sudoku",
                 "CONGRATULATIONS",
