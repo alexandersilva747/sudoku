@@ -20,39 +20,72 @@ public class Game {
     /**
      * Constructor to initialize the array
      */
-    public Game() {
+    public Game(int[] quadrantNumbers) {
         matrizGame = new int[6][6];
-        generateMatriz();
+        generateMatriz(matrizGame, quadrantNumbers);
     }
 
     /**
      * Method to generate array 6x6 of Sudoku with random numbers.
      * Place some numbers and leave others blank (represented by zero).
      */
-    public void generateMatriz() {
+    public void generateMatriz(int[][] matrizGame, int[] quadrantNumbers) {
         Random random = new Random();
+        int quadrantIndex = 0;
 
-        // Place the array with random numbers
-        for (int row = 0; row < 6; row++) {
-            for (int col = 0; col < 6; col++) {
-                // Assign random numbers between 1 and 6, or leave empty (0) for the user.
-                if (random.nextBoolean()) {
-                    boolean validNumber = false;
-                    //When I was using while, I got error.
-                    if (!validNumber){
-                        int num = random.nextInt(6)+ 1; //Numbers from 1 to 6
-                        //Verify if the number can be placed.
-                        if (isValid(num, row, col)){
-                            matrizGame[row][col] = num; // PLaced the number in the row
-                            validNumber = false; // Valid number, get out of the loop
+        // Iterate each quadrant 3x2.
+        for (int blockRow = 0; blockRow < 6; blockRow += 3) { // Jump 3 rows for block.
+            for (int blockCol = 0; blockCol < 6; blockCol += 2) { // Junp 2 columns for block.
+                int numbersToPlace = quadrantNumbers[quadrantIndex++];
+
+                // Place the specidied amoung of numbers in this quadrant.
+                for (int n = 0; n < numbersToPlace; n++) {
+                    boolean validNumberPlaced = false;
+
+                    // Attemps to place a random valid number.
+                    while (!validNumberPlaced) {
+                        int fila = blockRow + random.nextInt(3); // Inside the 3 quadrant rows.
+                        int col = blockCol + random.nextInt(2); // Inside the 2 quadrant columns.
+
+                        if (matrizGame[fila][col] == 0) { // Empty verification.
+                            int num = random.nextInt(6) + 1; // Numbers from 1 to 6.
+
+                            if (isValid(num, fila, col)) {
+                                matrizGame[fila][col] = num;
+                                validNumberPlaced = true; // Get out of the while.
+                            }
                         }
                     }
-                } else {
-                    matrizGame[row][col] = 0; // empty row
                 }
             }
         }
     }
+
+
+//    public void generateMatriz() {
+//        Random random = new Random();
+//
+//        // Place the array with random numbers
+//        for (int row = 0; row < 6; row++) {
+//            for (int col = 0; col < 6; col++) {
+//                // Assign random numbers between 1 and 6, or leave empty (0) for the user.
+//                if (random.nextBoolean()) {
+//                    boolean validNumber = false;
+//                    //When I was using while, I got error.
+//                    if (!validNumber){
+//                        int num = random.nextInt(6)+ 1; //Numbers from 1 to 6
+//                        //Verify if the number can be placed.
+//                        if (isValid(num, row, col)){
+//                            matrizGame[row][col] = num; // PLaced the number in the row
+//                            validNumber = false; // Valid number, get out of the loop
+//                        }
+//                    }
+//                } else {
+//                    matrizGame[row][col] = 0; // empty row
+//                }
+//            }
+//        }
+//    }
 
     /**
      * Method to verification if one number is valid in the row.

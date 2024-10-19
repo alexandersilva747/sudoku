@@ -95,6 +95,10 @@ public class GameController {
      * Method for action event in the game Button.
      * @param event represent the action event
      */
+
+    //Numbers in each quadrant
+    int[] quadrantNumbers = {2, 2, 2, 2, 2, 2};
+
     @FXML
     public void onActionStarGameButton(ActionEvent event) {
         // Show the alert
@@ -106,7 +110,7 @@ public class GameController {
         );
 
         // New sudoku array
-        game = new Game();
+        game = new Game(quadrantNumbers);
         int[][] matriz = game.getArrayGame();
 
         // Fill the TextField with the generate numbers.
