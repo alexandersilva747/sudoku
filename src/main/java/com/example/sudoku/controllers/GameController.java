@@ -256,49 +256,65 @@ public class GameController {
 
     /**
      * Method that implement the action help button
-     * @param actionEvent Represent click in the help button
+     *
      */
     @FXML
-    public void onActionHelpButton(ActionEvent actionEvent) {
-        // get the current array of the game
-        System.out.println("MouseEvent");
-        int[][] array = game.getArrayGame();
+    private int maxHelps = 40; // Maximum number of helps available.
+    private int usedHelps = 0; // Counter for used helps.
 
-        // Get the TextField (associated of the array)
+    public void onActionHelpButton(ActionEvent actionEvent) {
+        // Check if there are any helps left.
+        if (usedHelps >= maxHelps) {
+            new AlertBoxGame().showAlert("Sudoku", "No more helps!", "You have used all available helps.");
+            return;
+        }
+
+        // Get the current array of the game.
+        int[][] array = game.getArrayGame();
         TextField[][] textFields = getSudokuFields();
 
-        // Found an empty random field
+        // Find empty fields.
         List<int[]> emptyField = new ArrayList<>();
         for (int row = 0; row < 6; row++) {
             for (int col = 0; col < 6; col++) {
-                if (array[row][col] == 0) { // Empty field
+                if (array[row][col] == 0) { // Empty field.
                     emptyField.add(new int[]{row, col});
                 }
             }
         }
 
         if (emptyField.isEmpty()) {
-            new AlertBoxGame().showAlert("Sudoku", "¡No help!", "The array is full");
+            new AlertBoxGame().showAlert("Sudoku", "No help!", "The array is full.");
             return;
         }
 
-        // Selection an empty random field
+        // Select a random empty field.
         Random random = new Random();
         int[] randomField = emptyField.get(random.nextInt(emptyField.size()));
-        int fila = randomField[0];
+        int row = randomField[0];
         int col = randomField[1];
 
-        // Search a valid number for that position
+        // Search for a valid number for that position.
         for (int num = 1; num <= 6; num++) {
-            if (game.isValidSuggestion(num, fila, col)) {
-                // Suggest number
-                textFields[fila][col].setText(String.valueOf(num));
-                textFields[fila][col].setStyle("-fx-background-color: lightgreen;"); // Change color suggest
-                new AlertBoxGame().showAlert("Sudoku", "Help", "Number in row " + (fila+1) + ", column " + (col+1));
+            if (game.isValidSuggestion(num, row, col)) {
+                // Suggest the number.
+                textFields[row][col].setText(String.valueOf(num));
+                textFields[row][col].setStyle("-fx-background-color: lightgreen;"); // Change background color.
+
+                // Increment the used helps counter.
+                usedHelps++;
+
+                new AlertBoxGame().showAlert(
+                        "Sudoku",
+                        "Help",
+                        "Number suggested in row " + (row + 1) + ", column " + (col + 1) +
+                                ". Remaining helps: " + (maxHelps - usedHelps)
+                );
                 return;
             }
         }
 
-        new AlertBoxGame().showAlert("Sudoku", "No help", "Without valid number for the field.");
+        new AlertBoxGame().showAlert("Sudoku", "No help", "There is no valid number for this field.");
     }
+
 }
