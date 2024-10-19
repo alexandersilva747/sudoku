@@ -204,10 +204,25 @@ public class GameController {
 
     /**
      * Method that represent action event from the validation button
-     * @param actionEvent represent action event
      */
     @FXML
+    private int maxValidations = 40; // Maximum allowed validations.
+    private int usedValidations = 0; // Counter for used validations.
+
     public void onActionValidateButton(ActionEvent actionEvent) {
+        // Increment the validation counter.
+        usedValidations++;
+
+        // Check if the player has exceeded the maximum validations.
+        if (usedValidations > maxValidations) {
+            new AlertBoxGame().showAlert(
+                    "Sudoku",
+                    "GAME OVER",
+                    "You have exceeded the maximum number of validations. Try again!"
+            );
+            return;
+        }
+
         // Get the values of Sudoku from the TextField to validate them.
         System.out.println("ActionEvent");
         TextField[][] textFields = getSudokuFields();
@@ -221,7 +236,7 @@ public class GameController {
                         int num = Integer.parseInt(textValue);
                         currentMatriz[row][col] = num;
                     } catch (NumberFormatException e) {
-                        // Handle invalid numbers (for example, if the user index values no numbers)
+                        // Handle invalid numbers (for example, if the user enters non-numeric values).
                         new AlertBoxGame().showAlert(
                                 "Sudoku",
                                 "Error",
@@ -234,25 +249,39 @@ public class GameController {
         }
 
         // Array numbers validation.
+        boolean isValid = true; // Flag to check if the entire matrix is valid.
         for (int row = 0; row < 6; row++) {
             for (int col = 0; col < 6; col++) {
                 int num = currentMatriz[row][col];
-                if (num != 0) {
+                if (num != 0) { // Only validate non-empty cells.
                     if (!game.validateArrayGame(num, row, col)) {
-                        // If there are a mistake in the validation, show alert and stop
-                        return;
+                        isValid = false; // Set the flag to false if any validation fails.
+                        break; // No need to check further.
                     }
                 }
             }
+            if (!isValid) break; // Exit outer loop if invalid.
         }
 
-        // If each row are correct, show win message
+        if (!isValid) {
+            // If there is a mistake in the validation, show alert and stop.
+            new AlertBoxGame().showAlert(
+                    "Sudoku",
+                    "Mistake",
+                    "There is a mistake in your input. Used validations: " + usedValidations + "/" + maxValidations
+            );
+            return;
+        }
+
+        // If all rows are correct, show the win message.
         new AlertBoxGame().showAlert(
                 "Sudoku",
                 "CONGRATULATIONS!",
                 "YOU DID IT!"
         );
     }
+
+
 
     /**
      * Method that implement the action help button
