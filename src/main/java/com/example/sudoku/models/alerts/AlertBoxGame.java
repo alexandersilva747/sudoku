@@ -8,6 +8,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+/**
+ * Alert class to show user messages
+ */
+
 public class AlertBoxGame implements AlertBoxGameInterface {
     @Override
     public void showAlert(String title, String header, String message) {

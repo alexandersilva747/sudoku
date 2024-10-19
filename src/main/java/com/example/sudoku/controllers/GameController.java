@@ -1,5 +1,5 @@
 /**
- * @autor 2343025-2724 OLman Alexander Silva Zuñiga gr 81
+ * @autor 2343025-2724 Olman Alexander Silva Zuñiga gr 81
  * @version 1.0
  */
 package com.example.sudoku.controllers;
@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Game controller class
+ */
 public class GameController {
     public TextField TextField00;
     public TextField TextField01;
@@ -73,73 +76,75 @@ public class GameController {
     private Button gameInstructionsButton;
 
     /**
-     * Campo de texto que captura el numero ingresado por el usuario.
-     * Este campo esta vinculado a la interfaz grafica
-     *
+     * Field text to get the user number index.
      */
     @FXML
-    private TextField txtPalabraSecreta;
+    private TextField txtNumber;
 
     /**
-     * juego Instancia del juego que maneja la lógica y estado del juego.
+     * Instance of game class.
      */
     private Game game;
 
     /**
-     * Arreglo que representa los numeros que se van ingresando
+     * Array that represent the indexed numbers
      */
     private TextField[] numbFields;
 
-
+    /**
+     * Method for action event in the game Button.
+     * @param event represent the action event
+     */
     @FXML
     public void onActionStarGameButton(ActionEvent event) {
-        // Mostrar la alerta al usuario
+        // Show the alert
+        System.out.println("ActionEvent");
         new AlertBoxGame().showAlert(
                 "Sudoku",
                 "This is your last warning",
                 "Are you ready?"
         );
 
-        // Generar la nueva matriz de Sudoku
+        // New sudoku array
         game = new Game();
-        int[][] matriz = game.getMatrizGame();
+        int[][] matriz = game.getArrayGame();
 
-        // Llenar los TextField con los números generados
+        // Fill the TextField with the generate numbers.
         fillSudoku(matriz);
     }
 
     /**
-     * Llena los TextField del Sudoku con los valores generados en la matriz.
+     * Method that fill the TextField of the Sudoku with the generate values in the array.
      */
     private void fillSudoku(int[][] matriz) {
-        // Obtener todos los TextField del GridPane
+        // Get each TextField from the GridPane
         TextField[][] textFields = getSudokuFields();
-        //ciclo para limpiar el estilo de los campos que cambiaron a verde cuando se uso la ayuda en el juego anterior
+        //Loop for cleaning the text fields styles.
         for (int row = 0; row < 6; row++) {
             for (int col = 0; col < 6; col++) {
-                textFields[row][col].setStyle(""); // Esto restablece el estilo a su valor por defecto
+                textFields[row][col].setStyle(""); // This reset the style.
             }
         }
 
-        // Llenar los TextField con los valores de la matriz
+        // Fill the TextField with the array values
         for (int row = 0; row < 6; row++) {
             for (int col = 0; col < 6; col++) {
                 if (matriz[row][col] != 0) {
                     textFields[row][col].setText(String.valueOf(matriz[row][col]));
-                    textFields[row][col].setEditable(false); // Si es un número fijo, no se debe poder editar
+                    textFields[row][col].setEditable(false); // If is a static number, isn't editable.
                 } else {
-                    textFields[row][col].setText(""); // Dejar vacíos los campos editables
-                    textFields[row][col].setEditable(true); // Permitir al jugador ingresar números
+                    textFields[row][col].setText(""); // Leave the empty fields editable
+                    textFields[row][col].setEditable(true); // Allow index numbers user
                 }
             }
         }
     }
 
     /**
-     * Este metodo debe obtener todos los TextField que forman el tablero de Sudoku.
+     * Method to get each TextField from the sudoku array .
      */
     private TextField[][] getSudokuFields() {
-        // vincular los TextField desde archivo FXML a variables en este metodo
+        // Connection the TextField from FXML with variables in this method
         TextField[][] fields = new TextField[6][6];
         fields[0][0] = TextField00;
         fields[0][1] = TextField01;
@@ -181,14 +186,26 @@ public class GameController {
         return fields;
     }
 
+    /**
+     * Method tho implement the action of the instructions button
+     * @param actionEvent Represent action event
+     * @throws IOException Represent input output exception
+     */
     @FXML
     public void onActionGameInstructionsButton(ActionEvent actionEvent) throws IOException {
+        System.out.println("ActionEvent");
         InstructionsView instructionsView = InstructionsView.getInstance();
-        instructionsView.showInstructions(); // Llamar al metodo para mostrar la ventana o llevarla al frente
+        instructionsView.showInstructions(); // Call the method to show the window or bring in front
     }
+
+    /**
+     * Method that represent action event from the validation button
+     * @param actionEvent represent action event
+     */
     @FXML
     public void onActionValidateButton(ActionEvent actionEvent) {
-        // Obtener los valores del Sudoku desde los TextField
+        // Get the values of Sudoku from the TextField to validate them.
+        System.out.println("ActionEvent");
         TextField[][] textFields = getSudokuFields();
         int[][] currentMatriz = new int[6][6];
 
@@ -200,7 +217,7 @@ public class GameController {
                         int num = Integer.parseInt(textValue);
                         currentMatriz[row][col] = num;
                     } catch (NumberFormatException e) {
-                        // Manejar números inválidos (por ejemplo, si el jugador ingresó un valor no numérico)
+                        // Handle invalid numbers (for example, if the user index values no numbers)
                         new AlertBoxGame().showAlert(
                                 "Sudoku",
                                 "Error",
@@ -212,67 +229,72 @@ public class GameController {
             }
         }
 
-        // Validar cada número de la matriz
+        // Array numbers validation.
         for (int row = 0; row < 6; row++) {
             for (int col = 0; col < 6; col++) {
                 int num = currentMatriz[row][col];
                 if (num != 0) {
-                    if (!game.validateMatrizGame(num, row, col)) {
-                        // Si hay un error en la validación, mostrar alerta y detener
+                    if (!game.validateArrayGame(num, row, col)) {
+                        // If there are a mistake in the validation, show alert and stop
                         return;
                     }
                 }
             }
         }
 
-        // Si todas las celdas son válidas, puedes mostrar un mensaje de éxito
+        // If each row are correct, show win message
         new AlertBoxGame().showAlert(
                 "Sudoku",
-                "CONGRATULATIONS",
-                "YOU DID IT"
+                "CONGRATULATIONS!",
+                "YOU DID IT!"
         );
     }
 
+    /**
+     * Method that implement the action help button
+     * @param actionEvent Represent click in the help button
+     */
     @FXML
     public void onActionHelpButton(ActionEvent actionEvent) {
-        // Obtén la matriz actual del juego
-        int[][] matriz = game.getMatrizGame();
+        // get the current array of the game
+        System.out.println("MouseEvent");
+        int[][] array = game.getArrayGame();
 
-        // Obtén los TextField (asociados al tablero)
+        // Get the TextField (associated of the array)
         TextField[][] textFields = getSudokuFields();
 
-        // Encuentra un campo vacío aleatorio
+        // Found an empty random field
         List<int[]> emptyField = new ArrayList<>();
         for (int row = 0; row < 6; row++) {
             for (int col = 0; col < 6; col++) {
-                if (matriz[row][col] == 0) { // Campo vacío
+                if (array[row][col] == 0) { // Empty field
                     emptyField.add(new int[]{row, col});
                 }
             }
         }
 
         if (emptyField.isEmpty()) {
-            new AlertBoxGame().showAlert("Sudoku", "¡Sin sugerencias!", "El tablero está completo.");
+            new AlertBoxGame().showAlert("Sudoku", "¡No help!", "The array is full");
             return;
         }
 
-        // Selecciona un campo vacío aleatorio
+        // Selection an empty random field
         Random random = new Random();
         int[] randomField = emptyField.get(random.nextInt(emptyField.size()));
         int fila = randomField[0];
         int col = randomField[1];
 
-        // Buscar un número válido para esa posición
+        // Search a valid number for that position
         for (int num = 1; num <= 6; num++) {
             if (game.isValidSuggestion(num, fila, col)) {
-                // Sugerir el número al jugador
+                // Suggest number
                 textFields[fila][col].setText(String.valueOf(num));
-                textFields[fila][col].setStyle("-fx-background-color: lightgreen;"); // Cambiar color como sugerencia
-                new AlertBoxGame().showAlert("Sudoku", "Sugerencia", "Número sugerido en fila " + (fila+1) + ", columna " + (col+1));
+                textFields[fila][col].setStyle("-fx-background-color: lightgreen;"); // Change color suggest
+                new AlertBoxGame().showAlert("Sudoku", "Help", "Number in row " + (fila+1) + ", column " + (col+1));
                 return;
             }
         }
 
-        new AlertBoxGame().showAlert("Sudoku", "Sin sugerencias", "No se encontró un número válido para el campo seleccionado.");
+        new AlertBoxGame().showAlert("Sudoku", "No help", "Without valid number for the field.");
     }
 }

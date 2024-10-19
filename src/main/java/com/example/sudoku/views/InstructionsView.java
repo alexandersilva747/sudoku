@@ -14,6 +14,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * View class InstructionsView to show the instructions view window
+ */
 public class InstructionsView extends Stage {
 
     private final InstructionsController instructionsController;
@@ -49,11 +52,15 @@ public class InstructionsView extends Stage {
         private static InstructionsView INSTANCE;
     }
 
+    /**
+     * Method to show repeatedly with each click on instructions button.
+     * Pull the window in front if was already opened.
+     */
     public void showInstructions() {
         if (!this.isShowing()) {
-            this.show(); // Mostrar la ventana si no está visible
+            this.show(); // Show the window if isn't available.
         } else {
-            this.toFront(); // Si ya está abierta, llevarla al frente
+            this.toFront(); // If is available, bring in front.
         }
     }
 }

@@ -8,121 +8,138 @@ import com.example.sudoku.models.alerts.AlertBoxGame;
 
 import java.util.Random;
 
+/**
+ * Model class that contain de logic of the sudoku game.
+ */
 public class Game {
     /**
-     * Matriz bidimensional donde iran los numeros del sudoku.
+     * Two-dimensional array,where the sudoku numbers will go.
      */
     private int[][] matrizGame;
 
+    /**
+     * Constructor to initialize the array
+     */
     public Game() {
         matrizGame = new int[6][6];
         generateMatriz();
     }
 
     /**
-     * Genera una matriz 6x6 de Sudoku con números aleatorios.
-     * Coloca algunos números y deja otros vacíos (representados por 0).
+     * Method to generate array 6x6 of Sudoku with random numbers.
+     * Place some numbers and leave others blank (represented by zero).
      */
     public void generateMatriz() {
         Random random = new Random();
 
-        // Llenar la matriz con algunos números aleatorios
+        // Place the array with random numbers
         for (int row = 0; row < 6; row++) {
             for (int col = 0; col < 6; col++) {
-                // Asignar números aleatorios entre 1 y 6, o deja vacía (0) para que el jugador complete
+                // Assign random numbers between 1 and 6, or leave empty (0) for the user.
                 if (random.nextBoolean()) {
                     boolean validNumber = false;
-                    //Verificar esta parte de mi codigo, me estaba generando un ciclo infinito con while
+                    //When I was using while, I got error.
                     if (!validNumber){
-                        int num = random.nextInt(6)+ 1; //Numeros del 1 al 6
-                        //Verificar si el numero se puede colocar
+                        int num = random.nextInt(6)+ 1; //Numbers from 1 to 6
+                        //Verify if the number can be placed.
                         if (isValid(num, row, col)){
-                            matrizGame[row][col] = num; // Coloca el numero en la celda
-                            validNumber = false; // Numero valido, salir del ciclo
+                            matrizGame[row][col] = num; // PLaced the number in the row
+                            validNumber = false; // Valid number, get out of the loop
                         }
                     }
-                    //matrizGame[row][col] = random.nextInt(6) + 1; //Celda llena
                 } else {
-                    matrizGame[row][col] = 0; // Celda vacía
+                    matrizGame[row][col] = 0; // empty row
                 }
             }
         }
     }
 
     /**
-     * Metodo para verificar si un numero es valido en una celda dada
-     * @param num representa al numero generado
-     * @param fila representa valor de la fila
-     * @param columna representa valor de la columna
-     * @return retorna false para indicar que el numero ya esta en la fila
+     * Method to verification if one number is valid in the row.
+     * @param num represent the generate number
+     * @param fila represent the value of the row
+     * @param columna represent the value of the column
+     * @return false when the number is already in the row
      */
 
     private boolean isValid(int num, int fila, int columna) {
-        //Verificar fila
+        //Verification of the row
         for (int col = 0; col < 6; col++) {
             if (matrizGame[fila][col] == num) {
-                return false; //El numero ya esta en la fila
+                return false; //The number is already in the row.
             }
         }
-        // Verificar columna
+        // Verification of column
         for (int row = 0; row < 6; row++) {
             if (matrizGame[row][columna] == num) {
-                return false; // El numero ya esta en la columna
+                return false; // The number is already in the column
             }
         }
-        //Verificar cuadrante 2*3
+        //Verification of quadrant 2*3
         int inicioFila = (fila / 3) * 3;
         int inicioColumna = (columna / 2) * 2;
 
         for (int i = 0; i < 3; i++){
             for (int j = 0; j < 2; j++){
                 if (matrizGame[inicioFila + i][inicioColumna + j] == num){
-                    return  false; // El numero ya esta en el cuadrante 2*3
+                    return  false; // The number is already in the quadrant 2*3
                 }
             }
         }
-        return true; //El numero es valido
+        return true; //Valid number
     }
 
-    public int[][] getMatrizGame() {
+    public int[][] getArrayGame() {
         return matrizGame;
     }
 
-    //metodo para validar la ayuda
-
+    /**
+     * Method to validate the help button
+     * @param num represent the generate number
+     * @param fila represent the value of the row
+     * @param columna represent the value of the column
+     * @return false when the number is already in the row
+     */
     public boolean isValidSuggestion(int num, int fila, int columna) {
-        // Verificar fila
+        // Verification of the row
         for (int col = 0; col < 6; col++) {
             if (matrizGame[fila][col] == num) {
-                return false; // El numero ya esta en la fila
+                return false; // The number is already in the row
             }
         }
 
-        // Verificar columna
+        // Column verification.
         for (int row = 0; row < 6; row++) {
             if (matrizGame[row][columna] == num) {
-                return false; // El numero ya esta en la columna
+                return false; // The number is in the column
             }
         }
 
-        // Verificar cuadrante 3*2
+        // Quadrant verification 3*2
         int inicioFila = (fila / 3) * 3;
         int inicioColumna = (columna / 2) * 2;
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 2; j++) {
                 if (matrizGame[inicioFila + i][inicioColumna + j] == num) {
-                    return false; // El número ya está en el cuadrante
+                    return false; // The number is in the quadrant.
                 }
             }
         }
 
-        return true; // El número es válido
+        return true; // Valid number
     }
 
-    // Metodo para validar la matriz
-    public boolean validateMatrizGame(int num, int fila, int columna) {
-        //Verificar fila
+
+    /**
+     * Method to validate the array game.
+     * @param num represent the generate number
+     * @param fila represent the value of the row
+     * @param columna represent the value of the column
+     * @return false when the number is already in the row
+     */
+    public boolean validateArrayGame(int num, int fila, int columna) {
+        //Row verification
         for (int col = 0; col < 6; col++) {
             if (matrizGame[fila][col] == num) {
                 new AlertBoxGame().showAlert(
@@ -130,10 +147,10 @@ public class Game {
                         "Something isn't working",
                         "Please, try again"
                 );
-                return false; //El numero ya esta en la fila
+                return false; //Number in the row
             }
         }
-        // Verificar columna
+        // Column verification
         for (int row = 0; row < 6; row++) {
             if (matrizGame[row][columna] == num) {
                 new AlertBoxGame().showAlert(
@@ -141,10 +158,10 @@ public class Game {
                         "Something isn't working",
                         "Please, try again"
                 );
-                return false; // El numero ya esta en la columna
+                return false; // Number in the column
             }
         }
-        //Verificar cuadrante 2*3
+        //Quadrant 2*3 verification
         int inicioFila = (fila / 3) * 3;
         int inicioColumna = (columna / 2) * 2;
 
@@ -156,18 +173,16 @@ public class Game {
                             "Something isn't working",
                             "Please, try again"
                     );
-                    return  false; // El numero ya esta en el cuadrante 2*3
+                    return  false; // Number in the 2x3 quadrant
                 }
             }
         }
-        //Ajustar mensaje, porque esta apareciendo cuando hay colmnas o filas llenas,
-        //Solo debe aparecer cuando se complar las tres condiciones
         new AlertBoxGame().showAlert(
                 "Sudoku",
                 "CONGRATULATIONS",
                 "YOU DID IT"
         );
-        return true; //El numero es valido
+        return true; //Valid number
     }
 }
 

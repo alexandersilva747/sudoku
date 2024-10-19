@@ -1,5 +1,5 @@
 /**
- * @autor 2343025-2724 OLman Alexander Silva Zuñiga gr 81
+ * @autor 2343025-2724 Olman Alexander Silva Zuñiga gr 81
  * @version 1.0
  */
 package com.example.sudoku.views;
@@ -12,6 +12,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * View class GameView to show the main game window.
+ */
 public class GameView extends Stage{
     public GameView() throws IOException {
         FXMLLoader loader = new FXMLLoader(

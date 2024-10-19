@@ -1,5 +1,5 @@
 /**
- * @autor 2343025-2724 OLman Alexander Silva Zuñiga gr 81
+ * @autor 2343025-2724 Olman Alexander Silva Zuñiga gr 81
  * @version 1.0
  */
 
@@ -14,6 +14,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Main class to star the sudoku program
+ */
 public class Main extends Application {
 
     public static void main(String[] args) {
