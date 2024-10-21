@@ -58,40 +58,11 @@ public class GameController {
     public TextField TextField45;
     public TextField TextField54;
     public TextField TextField55;
-    /**
-     * Button to star the game
-     */
-    @FXML
-    private Button starGameButton;
-    /**
-     * Button to get help
-     */
-    private Button helpButton;
-
-    /**
-     * Button to validate the game
-     */
-    private Button validateButton;
-    /**
-     * Button to obtain the game instructions.
-     */
-    private Button gameInstructionsButton;
-
-    /**
-     * Field text to get the user number index.
-     */
-    @FXML
-    private TextField txtNumber;
 
     /**
      * Instance of game class.
      */
     private Game game;
-
-    /**
-     * Array that represent the indexed numbers
-     */
-    private TextField[] numbFields;
 
     //Numbers in each quadrant
     int[] quadrantNumbers = {2, 2, 2, 2, 2, 2};
@@ -208,10 +179,8 @@ public class GameController {
     private int usedValidations = 0; // Counter for used validations.
 
     public void onActionValidateButton(ActionEvent actionEvent) {
-        // Increment the validation counter.
         usedValidations++;
 
-        // Check if the player has exceeded the maximum validations.
         if (usedValidations > maxValidations) {
             new AlertBoxGame().showAlert(
                     "Sudoku",
@@ -221,8 +190,7 @@ public class GameController {
             return;
         }
 
-        // Get the values of Sudoku from the TextField to validate them.
-        System.out.println("ActionEvent");
+        // Get the current values from the TextFields.
         TextField[][] textFields = getSudokuFields();
         int[][] currentMatriz = new int[6][6];
 
@@ -231,54 +199,43 @@ public class GameController {
                 String textValue = textFields[row][col].getText();
                 if (!textValue.isEmpty()) {
                     try {
-                        int num = Integer.parseInt(textValue);
-                        currentMatriz[row][col] = num;
+                        currentMatriz[row][col] = Integer.parseInt(textValue);
                     } catch (NumberFormatException e) {
-                        // Handle invalid numbers (for example, if the user enters non-numeric values).
-                        new AlertBoxGame().showAlert(
-                                "Sudoku",
-                                "Error",
-                                "Please enter valid numbers."
-                        );
+                        new AlertBoxGame().showAlert("Sudoku", "Error", "Please enter valid numbers.");
                         return;
                     }
+                } else {
+                    new AlertBoxGame().showAlert("Sudoku", "Incomplete", "Please fill all the cells before validating.");
+                    return;
                 }
             }
         }
 
-        // Array numbers validation.
-        boolean isValid = true; // Flag to check if the entire matrix is valid.
+        // Get the solved array from the game class.
+        int[][] solvedArray = game.getSolvedArray();
+
+        // Compare the current matriz with the solved matriz.
+        boolean isSolved = true;
         for (int row = 0; row < 6; row++) {
             for (int col = 0; col < 6; col++) {
-                int num = currentMatriz[row][col];
-                if (num != 0) { // Only validate non-empty cells.
-                    if (!game.validateArrayGame(num, row, col)) {
-                        isValid = false; // Set the flag to false if any validation fails.
-                        break; // No need to check further.
-                    }
+                if (currentMatriz[row][col] != solvedArray[row][col]) {
+                    isSolved = false;
+                    break;
                 }
             }
-            if (!isValid) break; // Exit outer loop if invalid.
+            if (!isSolved) break;
         }
 
-        if (!isValid) {
-            // If there is a mistake in the validation, show alert and stop.
+        if (isSolved) {
+            new AlertBoxGame().showAlert("Sudoku", "CONGRATULATIONS!", "YOU DID IT!");
+        } else {
             new AlertBoxGame().showAlert(
                     "Sudoku",
                     "Mistake",
                     "There is a mistake in your input. Used validations: " + usedValidations + "/" + maxValidations
             );
-            return;
         }
-
-        // If all rows are correct, show the win message.
-        new AlertBoxGame().showAlert(
-                "Sudoku",
-                "CONGRATULATIONS!",
-                "YOU DID IT!"
-        );
     }
-
 
 
     /**
@@ -290,58 +247,47 @@ public class GameController {
     private int usedHelps = 0; // Counter for used helps.
 
     public void onActionHelpButton(ActionEvent actionEvent) {
-        // Check if there are any helps left.
         if (usedHelps >= maxHelps) {
             new AlertBoxGame().showAlert("Sudoku", "No more helps!", "You have used all available helps.");
             return;
         }
 
-        // Get the current array of the game.
-        int[][] array = game.getArrayGame();
+        // Get the solved array from the game class.
+        int[][] solvedArray = game.getSolvedArray();
         TextField[][] textFields = getSudokuFields();
 
         // Find empty fields.
-        List<int[]> emptyField = new ArrayList<>();
+        List<int[]> emptyFields = new ArrayList<>();
         for (int row = 0; row < 6; row++) {
             for (int col = 0; col < 6; col++) {
-                if (array[row][col] == 0) { // Empty field.
-                    emptyField.add(new int[]{row, col});
+                if (textFields[row][col].getText().isEmpty()) {
+                    emptyFields.add(new int[]{row, col});
                 }
             }
         }
 
-        if (emptyField.isEmpty()) {
+        if (emptyFields.isEmpty()) {
             new AlertBoxGame().showAlert("Sudoku", "No help!", "The array is full.");
             return;
         }
 
         // Select a random empty field.
         Random random = new Random();
-        int[] randomField = emptyField.get(random.nextInt(emptyField.size()));
+        int[] randomField = emptyFields.get(random.nextInt(emptyFields.size()));
         int row = randomField[0];
         int col = randomField[1];
 
-        // Search for a valid number for that position.
-        for (int num = 1; num <= 6; num++) {
-            if (game.isValidSuggestion(num, row, col)) {
-                // Suggest the number.
-                textFields[row][col].setText(String.valueOf(num));
-                textFields[row][col].setStyle("-fx-background-color: lightgreen;"); // Change background color.
+        // Reveal the correct number from the solved array.
+        int correctNum = solvedArray[row][col];
+        textFields[row][col].setText(String.valueOf(correctNum));
+        textFields[row][col].setStyle("-fx-background-color: lightgreen;");
 
-                // Increment the used helps counter.
-                usedHelps++;
+        usedHelps++;
 
-                new AlertBoxGame().showAlert(
-                        "Sudoku",
-                        "Help",
-                        "Number suggested in row " + (row + 1) + ", column " + (col + 1) +
-                                ". Remaining helps: " + (maxHelps - usedHelps)
-                );
-                return;
-            }
-        }
-
-        new AlertBoxGame().showAlert("Sudoku", "No help", "There is no valid number for this field.");
+        new AlertBoxGame().showAlert(
+                "Sudoku",
+                "Help",
+                "Revealed number in row " + (row + 1) + ", column " + (col + 1) + ". Remaining helps: " + (maxHelps - usedHelps)
+        );
     }
-
 }
