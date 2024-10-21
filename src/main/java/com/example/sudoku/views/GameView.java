@@ -4,6 +4,8 @@
  */
 package com.example.sudoku.views;
 
+import com.example.sudoku.controllers.GameController;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;

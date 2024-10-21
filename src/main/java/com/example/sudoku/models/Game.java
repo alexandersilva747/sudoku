@@ -23,36 +23,60 @@ public class Game {
     public Game(int[] quadrantNumbers) {
         matrizGame = new int[6][6];
         generateMatriz(matrizGame, quadrantNumbers);
+
     }
 
     /**
      * Method to generate array 6x6 of Sudoku with random numbers.
      * Place some numbers and leave others blank (represented by zero).
      */
+//    private boolean generateCompleteMatriz(int row, int col) {
+//        if (row == 6) return true; // Completed board.
+//        if (col == 6) return generateCompleteMatriz(row + 1, 0); // Go to next row.
+//
+//        Random random = new Random();
+//        int[] numbers = {1, 2, 3, 4, 5, 6}; // Possible numbers.
+//        shuffleArray(numbers, random); // Shuffle numbers for randomness.
+//
+//        for (int num : numbers) {
+//            if (isValid(num, row, col)) {
+//                matrizGame[row][col] = num;
+//
+//                if (generateCompleteMatriz(row, col + 1))
+//                    return true;
+//
+//                matrizGame[row][col] = 0; // Backtrack.
+//            }
+//        }
+//        return false; // No valid configuration found.
+//    }
+
+
+    /**
+     * Method to generate array and partially reveal numbers in the Sudoku grid based on quadrantNumbers.
+     */
     public void generateMatriz(int[][] matrizGame, int[] quadrantNumbers) {
         Random random = new Random();
         int quadrantIndex = 0;
 
-        // Iterate each quadrant 3x2.
-        for (int blockRow = 0; blockRow < 6; blockRow += 3) { // Jump 3 rows for block.
-            for (int blockCol = 0; blockCol < 6; blockCol += 2) { // Junp 2 columns for block.
+        // Iterate over each 3x2 quadrant.
+        for (int blockRow = 0; blockRow < 6; blockRow += 3) {
+            for (int blockCol = 0; blockCol < 6; blockCol += 2) {
                 int numbersToPlace = quadrantNumbers[quadrantIndex++];
 
-                // Place the specidied amoung of numbers in this quadrant.
+                // Place the specified number of values in the quadrant.
                 for (int n = 0; n < numbersToPlace; n++) {
                     boolean validNumberPlaced = false;
 
-                    // Attemps to place a random valid number.
                     while (!validNumberPlaced) {
-                        int fila = blockRow + random.nextInt(3); // Inside the 3 quadrant rows.
-                        int col = blockCol + random.nextInt(2); // Inside the 2 quadrant columns.
+                        int fila = blockRow + random.nextInt(3);
+                        int col = blockCol + random.nextInt(2);
 
-                        if (matrizGame[fila][col] == 0) { // Empty verification.
-                            int num = random.nextInt(6) + 1; // Numbers from 1 to 6.
-
-                            if (isValid(num, fila, col)) {
+                        if (matrizGame[fila][col] == 0) {
+                            int num = random.nextInt(6) + 1;
+                            if (isValid(num, fila, col)){
                                 matrizGame[fila][col] = num;
-                                validNumberPlaced = true; // Get out of the while.
+                                validNumberPlaced = true;
                             }
                         }
                     }
@@ -61,36 +85,11 @@ public class Game {
         }
     }
 
-
-//    public void generateMatriz() {
-//        Random random = new Random();
-//
-//        // Place the array with random numbers
-//        for (int row = 0; row < 6; row++) {
-//            for (int col = 0; col < 6; col++) {
-//                // Assign random numbers between 1 and 6, or leave empty (0) for the user.
-//                if (random.nextBoolean()) {
-//                    boolean validNumber = false;
-//                    //When I was using while, I got error.
-//                    if (!validNumber){
-//                        int num = random.nextInt(6)+ 1; //Numbers from 1 to 6
-//                        //Verify if the number can be placed.
-//                        if (isValid(num, row, col)){
-//                            matrizGame[row][col] = num; // PLaced the number in the row
-//                            validNumber = false; // Valid number, get out of the loop
-//                        }
-//                    }
-//                } else {
-//                    matrizGame[row][col] = 0; // empty row
-//                }
-//            }
-//        }
-//    }
-
     /**
-     * Method to verification if one number is valid in the row.
-     * @param num represent the generate number
-     * @param fila represent the value of the row
+     * Method to verification if one number is valid in the row, column and quadrant.
+     *
+     * @param num     represent the generate number
+     * @param fila    represent the value of the row
      * @param columna represent the value of the column
      * @return false when the number is already in the row
      */
@@ -112,110 +111,58 @@ public class Game {
         int inicioFila = (fila / 3) * 3;
         int inicioColumna = (columna / 2) * 2;
 
-        for (int i = 0; i < 3; i++){
-            for (int j = 0; j < 2; j++){
-                if (matrizGame[inicioFila + i][inicioColumna + j] == num){
-                    return  false; // The number is already in the quadrant 2*3
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 2; j++) {
+                if (matrizGame[inicioFila + i][inicioColumna + j] == num) {
+                    return false; // The number is already in the quadrant 2*3
                 }
             }
         }
         return true; //Valid number
     }
 
+
+    /**
+     * Shuffle an array to randomize its contents.
+     */
+    private void shuffleArray(int[] array, Random random) {
+        for (int i = array.length - 1; i > 0; i--) {
+            int j = random.nextInt(i + 1);
+            int temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+    }
+
+    /**
+     * Get the current Sudoku board.
+     */
     public int[][] getArrayGame() {
         return matrizGame;
     }
 
+
     /**
-     * Method to validate the help button
-     * @param num represent the generate number
-     * @param fila represent the value of the row
-     * @param columna represent the value of the column
-     * @return false when the number is already in the row
+     * Validate if a suggestion from click in help is valid.
      */
     public boolean isValidSuggestion(int num, int fila, int columna) {
-        // Verification of the row
-        for (int col = 0; col < 6; col++) {
-            if (matrizGame[fila][col] == num) {
-                return false; // The number is already in the row
-            }
-        }
-
-        // Column verification.
-        for (int row = 0; row < 6; row++) {
-            if (matrizGame[row][columna] == num) {
-                return false; // The number is in the column
-            }
-        }
-
-        // Quadrant verification 3*2
-        int inicioFila = (fila / 3) * 3;
-        int inicioColumna = (columna / 2) * 2;
-
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 2; j++) {
-                if (matrizGame[inicioFila + i][inicioColumna + j] == num) {
-                    return false; // The number is in the quadrant.
-                }
-            }
-        }
-
-        return true; // Valid number
+        return isValid(num, fila, columna);
     }
 
 
     /**
-     * Method to validate the array game.
-     * @param num represent the generate number
-     * @param fila represent the value of the row
-     * @param columna represent the value of the column
-     * @return false when the number is already in the row
+     * Validate the array game.
      */
     public boolean validateArrayGame(int num, int fila, int columna) {
-        //Row verification
-        for (int col = 0; col < 6; col++) {
-            if (matrizGame[fila][col] == num) {
-                new AlertBoxGame().showAlert(
-                        "Sudoku",
-                        "Something isn't working",
-                        "Please, try again"
-                );
-                return false; //Number in the row
-            }
-        }
-        // Column verification
-        for (int row = 0; row < 6; row++) {
-            if (matrizGame[row][columna] == num) {
-                new AlertBoxGame().showAlert(
-                        "Sudoku",
-                        "Something isn't working",
-                        "Please, try again"
-                );
-                return false; // Number in the column
-            }
-        }
-        //Quadrant 2*3 verification
-        int inicioFila = (fila / 3) * 3;
-        int inicioColumna = (columna / 2) * 2;
-
-        for (int i = 0; i < 3; i++){
-            for (int j = 0; j < 2; j++){
-                if (matrizGame[inicioFila + i][inicioColumna + j] == num){
-                    new AlertBoxGame().showAlert(
-                            "Sudoku",
-                            "Something isn't working",
-                            "Please, try again"
-                    );
-                    return  false; // Number in the 2x3 quadrant
-                }
-            }
+        if (!isValid(num, fila, columna)) {
+            new AlertBoxGame().showAlert(
+                    "Sudoku", "Something isn't working", "Please, try again"
+            );
+            return false;
         }
         new AlertBoxGame().showAlert(
-                "Sudoku",
-                "CONGRATULATIONS",
-                "YOU DID IT"
+                "Sudoku", "CONGRATULATIONS", "YOU DID IT"
         );
-        return true; //Valid number
+        return true;
     }
 }
-

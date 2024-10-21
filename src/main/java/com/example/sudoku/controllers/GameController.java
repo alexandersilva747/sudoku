@@ -11,6 +11,7 @@ import com.example.sudoku.views.InstructionsView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -66,6 +67,7 @@ public class GameController {
      * Button to get help
      */
     private Button helpButton;
+
     /**
      * Button to validate the game
      */
@@ -91,14 +93,12 @@ public class GameController {
      */
     private TextField[] numbFields;
 
-    /**
-     * Method for action event in the game Button.
-     * @param event represent the action event
-     */
-
     //Numbers in each quadrant
     int[] quadrantNumbers = {2, 2, 2, 2, 2, 2};
 
+    /**
+     * Method to star the game
+     */
     @FXML
     public void onActionStarGameButton(ActionEvent event) {
         // Show the alert
@@ -112,8 +112,6 @@ public class GameController {
         // New sudoku array
         game = new Game(quadrantNumbers);
         int[][] matriz = game.getArrayGame();
-
-        // Fill the TextField with the generate numbers.
         fillSudoku(matriz);
     }
 
